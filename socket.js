@@ -5,7 +5,7 @@ const server = new Server(3000)
 let connectionCount = 0
 server.on('connection', socket => {
     console.log(`Connection count: ${++connectionCount}`)
-    
+
     socket.on('chat', message => {
         server.emit('chat', message)
     })
@@ -25,6 +25,23 @@ server.on('connection', socket => {
             "upTime": os.uptime()
         })
     })
+
+    setInterval(() => {
+        server.emit('status', {
+            "eol": os.eol,
+            "arch": os.arch(),
+            "cpus": os.cpus(),
+            "freemem": os.freemem(),
+            "hostname": os.hostname(),
+            "loadavg": os.loadavg(),
+            "nw": os.networkInterfaces(),
+            "platform": os.platform(),
+            "totalmem": os.totalmem(),
+            "type": os.type(),
+            "upTime": os.uptime()
+        })
+    }, 2000)
+
 
     socket.emit('ready', 'Welcome')
 })
